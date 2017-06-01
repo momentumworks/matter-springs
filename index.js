@@ -16,6 +16,9 @@ function negate(vector) {
   }
 }
 
+const ZeroPoint = {x: 0, y: 0}
+const ZeroVector = ZeroPoint
+
 /**
  * Springs plugin for Matter JS
  * @module MatterSprings
@@ -64,23 +67,33 @@ const MatterSprings = {
           x: p2.x - p1.x, 
           y: p2.y - p1.y
         }
+
         const distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length
 
-        const bodyASpeed = (spring.bodyA != null) ? spring.bodyA.speed : 0
-        const bodyBSpeed = (spring.bodyB != null) ? spring.bodyB.speed : 0
-
         if (Math.abs(distance) > 1/10000) {
-          const fSpring = spring.stiffness * distance
-          const fDamping = spring.damping * (bodyASpeed + bodyBSpeed)
-          var f = (fSpring + fDamping) * 1e-6
+          const bodyAVelocity = (bodyA != null) ? bodyA.velocity : ZeroVector
+          const bodyBVelocity = (bodyB != null) ? bodyB.velocity : ZeroVector
 
-          if (bodyA != null && bodyB != null) {
-            f = f/2
+          const fSpring = {
+            x: stiffness * distance * delta.x,
+            y: stiffness * distance * delta.y
           }
 
-          const force = {
-            x: delta.x * f,
-            y: delta.y * f
+          const fDamping = {
+            x: -damping * 100 * (bodyAVelocity.x + bodyBVelocity.x),
+            y: -damping * 100 * (bodyAVelocity.y + bodyBVelocity.y)
+          }
+
+          var force = {
+            x: (fSpring.x + fDamping.x) * 1e-6,
+            y: (fSpring.y + fDamping.y) * 1e-6
+          }
+
+          if (bodyA != null && bodyB != null) {
+            force = {
+              x: force.x / 2,
+              y: force.y / 2
+            }
           }
 
           if (bodyA != null) {
@@ -106,12 +119,11 @@ const MatterSprings = {
      */
     create: function(options) {
       const { bodyA, bodyB, pointA, pointB, stiffness, damping, length } = options
-      const pointZero = {x: 0, y: 0}
       return {
         bodyA: bodyA,
         bodyB: bodyB,
-        pointA: pointA || pointZero,
-        pointB: pointB || pointZero,
+        pointA: pointA || ZeroPoint,
+        pointB: pointB || ZeroPoint,
         stiffness: stiffness || 0.5,
         damping: damping || 0.2,
         length: length || 0,
