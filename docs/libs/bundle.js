@@ -173,9 +173,12 @@ var MatterSprings = {
           };
           var distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length;
 
+          var bodyASpeed = spring.bodyA != null ? spring.bodyA.speed : 0;
+          var bodyBSpeed = spring.bodyB != null ? spring.bodyB.speed : 0;
+
           if (Math.abs(distance) > 1 / 10000) {
             var fSpring = spring.stiffness * distance;
-            var fDamping = -spring.damping * spring.bodyA.speed;
+            var fDamping = spring.damping * (bodyASpeed + bodyBSpeed);
             var f = (fSpring + fDamping) * 1e-6;
 
             if (bodyA != null && bodyB != null) {

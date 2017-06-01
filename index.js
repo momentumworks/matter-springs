@@ -66,9 +66,12 @@ const MatterSprings = {
         }
         const distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length
 
+        const bodyASpeed = (spring.bodyA != null) ? spring.bodyA.speed : 0
+        const bodyBSpeed = (spring.bodyB != null) ? spring.bodyB.speed : 0
+
         if (Math.abs(distance) > 1/10000) {
           const fSpring = spring.stiffness * distance
-          const fDamping = -spring.damping * spring.bodyA.speed
+          const fDamping = spring.damping * (bodyASpeed + bodyBSpeed)
           var f = (fSpring + fDamping) * 1e-6
 
           if (bodyA != null && bodyB != null) {
