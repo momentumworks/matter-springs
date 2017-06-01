@@ -1,5 +1,5 @@
 /*!
- * matter-springs 0.0.1 by  2017-05-31
+ * matter-springs 0.0.1 by  2017-06-01
  * https://bitbucket.org/theconcreteutopia/matter-springs#readme
  * License MIT
  */
@@ -161,7 +161,8 @@ var MatterSprings = {
               pointA = spring.pointA,
               pointB = spring.pointB,
               stiffness = spring.stiffness,
-              damping = spring.damping;
+              damping = spring.damping,
+              length = spring.length;
 
 
           var p1 = bodyA != null ? offset(bodyA.position, pointA) : pointA;
@@ -170,9 +171,9 @@ var MatterSprings = {
             x: p2.x - p1.x,
             y: p2.y - p1.y
           };
-          var distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2));
+          var distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length;
 
-          if (distance > 1 / 10000) {
+          if (Math.abs(distance) > 1 / 10000) {
             var fSpring = spring.stiffness * distance;
             var fDamping = -spring.damping * spring.bodyA.speed;
             var f = (fSpring + fDamping) * 1e-6;
@@ -227,7 +228,8 @@ var MatterSprings = {
           pointA = options.pointA,
           pointB = options.pointB,
           stiffness = options.stiffness,
-          damping = options.damping;
+          damping = options.damping,
+          length = options.length;
 
       var pointZero = { x: 0, y: 0 };
       return {
@@ -237,6 +239,7 @@ var MatterSprings = {
         pointB: pointB || pointZero,
         stiffness: stiffness || 0.5,
         damping: damping || 0.2,
+        length: length || 0,
         type: 'spring'
       };
     }
@@ -309,6 +312,14 @@ module.exports = MatterSprings;
  * @property damping
  * @type number
  * @default 0.2
+ */
+
+/**
+ * A `Number` that specifies the length of the spring 
+ *
+ * @property length
+ * @type number
+ * @default 0
  */
 
 /***/ })

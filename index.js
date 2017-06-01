@@ -56,7 +56,7 @@ const MatterSprings = {
     beforeUpdate: function(engine) {
       const world = engine.world;
       for (var spring of world.plugin.springs) {
-        const { bodyA, bodyB, pointA, pointB, stiffness, damping } = spring
+        const { bodyA, bodyB, pointA, pointB, stiffness, damping, length } = spring
 
         const p1 = (bodyA != null) ? offset(bodyA.position, pointA) : pointA
         const p2 = (bodyB != null) ? offset(bodyB.position, pointB) : pointB
@@ -64,9 +64,9 @@ const MatterSprings = {
           x: p2.x - p1.x, 
           y: p2.y - p1.y
         }
-        const distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2))
+        const distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length
 
-        if (distance > 1/10000) {
+        if (Math.abs(distance) > 1/10000) {
           const fSpring = spring.stiffness * distance
           const fDamping = -spring.damping * spring.bodyA.speed
           var f = (fSpring + fDamping) * 1e-6
@@ -102,7 +102,7 @@ const MatterSprings = {
      * @return {spring} spring
      */
     create: function(options) {
-      const { bodyA, bodyB, pointA, pointB, stiffness, damping } = options
+      const { bodyA, bodyB, pointA, pointB, stiffness, damping, length } = options
       const pointZero = {x: 0, y: 0}
       return {
         bodyA: bodyA,
@@ -111,6 +111,7 @@ const MatterSprings = {
         pointB: pointB || pointZero,
         stiffness: stiffness || 0.5,
         damping: damping || 0.2,
+        length: length || 0,
         type: 'spring'
       }
     }
@@ -183,4 +184,12 @@ module.exports = MatterSprings;
  * @property damping
  * @type number
  * @default 0.2
+ */
+
+/**
+ * A `Number` that specifies the length of the spring 
+ *
+ * @property length
+ * @type number
+ * @default 0
  */

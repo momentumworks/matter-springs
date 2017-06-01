@@ -68,6 +68,12 @@ A `Number` that specifies the damping applied to the spring
 
 * **** *damping* 
 
+A `Number` that specifies the length of the spring 
+
+### Properties:
+
+* **** *length* 
+
 <!-- End index.js -->
 
 <!-- Start webpack.config.js -->
