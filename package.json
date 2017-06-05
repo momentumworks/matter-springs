@@ -22,7 +22,7 @@
     "dev": "webpack-dev-server --content-base docs/",
     "test": "mocha test",
     "lint": "eslint *.js test/*.js",
-    "doc": "markdox *.js -o README.md",
+    "doc": "markdox *.js -o API.md",
     "release": "npm version minor -m 'release %s' && npm publish",
     "release-patch": "npm version patch -m 'release %s' && npm publish",
     "preversion": "npm run lint && npm run test",

@@ -1,82 +1,43 @@
+# matter-springs
 
+> A DHO springs plugin for [matter.js](https://github.com/liabru/matter-js/)
 
-<!-- Start index.js -->
+This plugin allows you to add Damped Harmonic Oscillator (DHO) springs to your project
 
-## MatterSprings
+## Install
 
-Springs plugin for Matter JS
+Get the [matter-springs.js](build/matter-springs.js) file directly
 
-## create({})
+### Dependencies
 
-Creates a new spring.
-All properties are optional.
-See the properties section below for detailed information on what you can pass via the `options` object.
+- [matter.js](https://github.com/liabru/matter-js/)
 
-### Params:
+## Usage
 
-* *{}* options
+```js
+Matter.use('matter-springs');
+// or
+Matter.use(MatterSprings);
+```
 
-### Return:
+See [Using Plugins](https://github.com/liabru/matter-js/wiki/Using-plugins#using-plugins) for more information.
 
-* **spring** spring
+#### Basic usage
 
-An integer `Number` uniquely identifying number generated in `Composite.create` by `Common.nextId`.
+```js
+const circle = Bodies.circle(400, 300, 30, {density: 0.005});
+World.add(world, circle);
 
-### Properties:
+world.plugin.springs = [
+  Spring.create({
+    bodyA: circle, 
+    pointB: {x: 200, y: 200}, 
+    stiffness: 0.5, 
+    damping: 1
+  })
+]
+```
 
-* **** *id* 
+## Documentation
 
-A `String` denoting the type of object.
-
-### Properties:
-
-* **** *type* 
-
-The first possible `Body` that this spring is attached to.
-
-### Properties:
-
-* **** *bodyA* 
-
-The second possible `Body` that this spring is attached to.
-
-### Properties:
-
-* **** *bodyB* 
-
-A `Vector` that specifies the offset of the spring from center of the `spring.bodyA` if defined, otherwise a world-space position.
-
-### Properties:
-
-* **** *pointA* 
-
-A `Vector` that specifies the offset of the spring from center of the `spring.bodyA` if defined, otherwise a world-space position.
-
-### Properties:
-
-* **** *pointB* 
-
-A `Number` that specifies the stiffness of the spring
-
-### Properties:
-
-* **** *stiffness* 
-
-A `Number` that specifies the damping applied to the spring
-
-### Properties:
-
-* **** *damping* 
-
-A `Number` that specifies the length of the spring 
-
-### Properties:
-
-* **** *length* 
-
-<!-- End index.js -->
-
-<!-- Start webpack.config.js -->
-
-<!-- End webpack.config.js -->
-
+See the [API docs](API.md).

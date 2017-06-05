@@ -39,16 +39,7 @@ const MatterSprings = {
       MatterSprings.Engine.beforeUpdate(engine);
     });
 
-    // TODO Handle correctly adding to the world and to composites
-    // base.before('Composite.add', function(composite, args) {
-    //   console.log("About to add")
-    //   // MatterSprings.Composite.beforeAdd(this);
-    // })
-
-    // base.before('World.add', function(world, args) {
-    //   console.log("About to add")
-    //   // MatterSprings.Composite.beforeAdd(this);
-    // })
+    // TODO Handle correctly adding to the world and to composites via World.add(world, spring)
   },
 
   Engine: {
@@ -138,73 +129,52 @@ Matter.Plugin.register(MatterSprings);
 module.exports = MatterSprings;
 
 /**
+ * @namespace MatterSprings.Spring
+ */
+
+/**
+ * @property {number} id
  * An integer `Number` uniquely identifying number generated in `Composite.create` by `Common.nextId`.
- *
- * @property id
- * @type number
  */
 
 /**
- * A `String` denoting the type of object.
- *
- * @property type
- * @type string
- * @default "spring"
- * @readOnly
+ * @property {string} type
+ * A readonly `string` denoting the type of object. (Default `"spring"`)
  */
 
 /**
- * The first possible `Body` that this spring is attached to.
- *
- * @property bodyA
- * @type body
- * @default null
+ * @property {Matter.Body} bodyA
+ * The first possible `Body` that this spring is attached to. (Default `null`)
  */
 
 /**
- * The second possible `Body` that this spring is attached to.
- *
- * @property bodyB
- * @type body
- * @default null
+ * @property {Matter.Body} bodyB
+ * The second possible `Body` that this spring is attached to. (Default `null`)
  */
 
 /**
- * A `Vector` that specifies the offset of the spring from center of the `spring.bodyA` if defined, otherwise a world-space position.
- *
- * @property pointA
- * @type vector
- * @default { x: 0, y: 0 }
+ * @property {Vector} pointA
+ * A `Vector` that specifies the offset of the spring from center of the `spring.bodyA` if defined, 
+ * otherwise a world-space position. (Default `{ x: 0, y: 0 }`)
  */
 
 /**
- * A `Vector` that specifies the offset of the spring from center of the `spring.bodyA` if defined, otherwise a world-space position.
- *
- * @property pointB
- * @type vector
- * @default { x: 0, y: 0 }
+ * @property {Vector} pointB
+ * A `Vector` that specifies the offset of the spring from center of the `spring.bodyA` if defined, 
+ * otherwise a world-space position. (Default `{ x: 0, y: 0 }`)
  */
 
 /**
- * A `Number` that specifies the stiffness of the spring
- *
- * @property stiffness
- * @type number
- * @default 0.5
+ * @property {number} stiffness
+ * A `number` that specifies the stiffness of the spring. (Default `0.5`)
  */
 
 /**
- * A `Number` that specifies the damping applied to the spring
- *
- * @property damping
- * @type number
- * @default 0.2
+ * @property {number} damping
+ * A `Number` that specifies the damping applied to the spring. (Default `0.2`)
  */
 
 /**
- * A `Number` that specifies the length of the spring 
- *
- * @property length
- * @type number
- * @default 0
+ * @property {number} length
+ * A `number` that specifies the length of the spring. (Default `0`)
  */
