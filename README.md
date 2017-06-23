@@ -41,3 +41,7 @@ world.plugin.springs = [
 ## Documentation
 
 See the [API docs](API.md).
+
+## Important Note
+
+This code is actually wrong right now, since it doesn't take into account that the bodies maybe already be travelling at some velocity which is irrelevant to the spring. However, it is good enough for our use case (connecting a body B to a point A), so this will be fixed for 2 connected bodies at a later time.

@@ -66,13 +66,15 @@ const MatterSprings = {
           const bodyBVelocity = (bodyB != null) ? bodyB.velocity : ZeroVector
 
           const fSpring = {
-            x: stiffness * distance * delta.x,
-            y: stiffness * distance * delta.y
+            x: stiffness * delta.x,
+            y: stiffness * delta.y
           }
 
           const fDamping = {
-            x: -damping * 100 * (bodyAVelocity.x + bodyBVelocity.x),
-            y: -damping * 100 * (bodyAVelocity.y + bodyBVelocity.y)
+            // TODO This code is actually wrong right now, since it doesn't take into account that the 
+            // bodies maybe already be travelling at some velocity which is irrelevant to the spring
+            x: damping * 100 * (bodyAVelocity.x + bodyBVelocity.x),
+            y: damping * 100 * (bodyAVelocity.y + bodyBVelocity.y)
           }
 
           var force = {
@@ -80,19 +82,12 @@ const MatterSprings = {
             y: (fSpring.y + fDamping.y) * 1e-6
           }
 
-          if (bodyA != null && bodyB != null) {
-            force = {
-              x: force.x / 2,
-              y: force.y / 2
-            }
-          }
-
           if (bodyA != null) {
-            Matter.Body.applyForce(bodyA, pointA, force)
+            Matter.Body.applyForce(bodyA, p1, force)
           }
 
           if (bodyB != null) {
-            Matter.Body.applyForce(bodyB, pointB, negate(force))
+            Matter.Body.applyForce(bodyB, p2, negate(force))
           }
         }
       }
