@@ -1,5 +1,5 @@
 /*!
- * matter-springs 0.0.1 by  2017-06-23
+ * matter-springs 0.0.1 by  2017-06-29
  * https://bitbucket.org/theconcreteutopia/matter-springs#readme
  * License MIT
  */
@@ -168,7 +168,7 @@ var MatterSprings = {
 
           var distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length;
 
-          if (Math.abs(distance) > 1 / 10000) {
+          if (Math.abs(distance) > 0.01) {
             var bodyAVelocity = bodyA != null ? bodyA.velocity : ZeroVector;
             var bodyBVelocity = bodyB != null ? bodyB.velocity : ZeroVector;
 

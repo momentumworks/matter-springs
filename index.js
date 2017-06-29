@@ -61,7 +61,7 @@ const MatterSprings = {
 
         const distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length
 
-        if (Math.abs(distance) > 1/10000) {
+        if (Math.abs(distance) > 0.01) {
           const bodyAVelocity = (bodyA != null) ? bodyA.velocity : ZeroVector
           const bodyBVelocity = (bodyB != null) ? bodyB.velocity : ZeroVector
 
