@@ -1,5 +1,5 @@
 /*!
- * matter-springs 0.0.1 by  2017-06-29
+ * matter-springs 0.0.1 by  2017-08-04
  * https://bitbucket.org/theconcreteutopia/matter-springs#readme
  * License MIT
  */
@@ -103,13 +103,6 @@ function offset(point, vector) {
   };
 }
 
-function negate(vector) {
-  return {
-    x: -vector.x,
-    y: -vector.y
-  };
-}
-
 var ZeroPoint = { x: 0, y: 0 };
 var ZeroVector = ZeroPoint;
 
@@ -184,17 +177,18 @@ var MatterSprings = {
               y: damping * 100 * (bodyAVelocity.y + bodyBVelocity.y)
             };
 
-            var force = {
-              x: (fSpring.x + fDamping.x) * 1e-6,
-              y: (fSpring.y + fDamping.y) * 1e-6
-            };
-
             if (bodyA != null) {
-              Matter.Body.applyForce(bodyA, p1, force);
+              Matter.Body.applyForce(bodyA, p1, {
+                x: (fSpring.x - fDamping.x) * 1e-6,
+                y: (fSpring.y - fDamping.y) * 1e-6
+              });
             }
 
             if (bodyB != null) {
-              Matter.Body.applyForce(bodyB, p2, negate(force));
+              Matter.Body.applyForce(bodyB, p2, {
+                x: -(fSpring.x + fDamping.x) * 1e-6,
+                y: -(fSpring.y + fDamping.y) * 1e-6
+              });
             }
           }
         }
