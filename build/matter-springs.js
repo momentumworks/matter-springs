@@ -1,5 +1,5 @@
 /*!
- * matter-springs 0.0.1 by  2017-08-04
+ * matter-springs 0.0.1 by  2017-08-11
  * https://bitbucket.org/theconcreteutopia/matter-springs#readme
  * License MIT
  */
@@ -103,6 +103,13 @@ function offset(point, vector) {
   };
 }
 
+function rotateVector(vector, rotation) {
+  return {
+    x: vector.x * Math.cos(rotation) - vector.y * Math.sin(rotation),
+    y: vector.x * Math.sin(rotation) + vector.y * Math.cos(rotation)
+  };
+}
+
 var ZeroPoint = { x: 0, y: 0 };
 var ZeroVector = ZeroPoint;
 
@@ -152,8 +159,8 @@ var MatterSprings = {
               length = spring.length;
 
 
-          var p1 = bodyA != null ? offset(bodyA.position, pointA) : pointA;
-          var p2 = bodyB != null ? offset(bodyB.position, pointB) : pointB;
+          var p1 = bodyA != null ? offset(bodyA.position, rotateVector(pointA, bodyA.angle)) : pointA;
+          var p2 = bodyB != null ? offset(bodyB.position, rotateVector(pointB, bodyB.angle)) : pointB;
           var delta = {
             x: p2.x - p1.x,
             y: p2.y - p1.y

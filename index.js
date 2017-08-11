@@ -9,6 +9,13 @@ function offset(point, vector) {
   }
 }
 
+function rotateVector(vector, rotation) {
+  return {
+    x: (vector.x * Math.cos(rotation)) - (vector.y * Math.sin(rotation)),
+    y: (vector.x * Math.sin(rotation)) + (vector.y * Math.cos(rotation))
+  }
+}
+
 const ZeroPoint = {x: 0, y: 0}
 const ZeroVector = ZeroPoint
 
@@ -45,8 +52,8 @@ const MatterSprings = {
       for (var spring of world.plugin.springs) {
         const { bodyA, bodyB, pointA, pointB, stiffness, damping, length } = spring
 
-        const p1 = (bodyA != null) ? offset(bodyA.position, pointA) : pointA
-        const p2 = (bodyB != null) ? offset(bodyB.position, pointB) : pointB
+        const p1 = (bodyA != null) ? offset(bodyA.position, rotateVector(pointA, bodyA.angle)) : pointA
+        const p2 = (bodyB != null) ? offset(bodyB.position, rotateVector(pointB, bodyB.angle)) : pointB
         const delta = {
           x: p2.x - p1.x, 
           y: p2.y - p1.y
