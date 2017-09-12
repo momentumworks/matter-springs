@@ -1,5 +1,5 @@
 /*!
- * matter-springs 0.0.1 by  2017-09-08
+ * matter-springs 0.0.1 by  2017-09-12
  * https://bitbucket.org/theconcreteutopia/matter-springs#readme
  * License MIT
  */
@@ -137,15 +137,17 @@ function updateSprings(springs) {
         y: p2.y - p1.y
       };
 
-      var distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length;
+      var rawDistance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2));
+      var distance = rawDistance - length;
 
       if (Math.abs(distance) > 0.01) {
         var bodyAVelocity = bodyA != null ? bodyA.velocity : ZeroVector;
         var bodyBVelocity = bodyB != null ? bodyB.velocity : ZeroVector;
+        var distanceRatio = distance / rawDistance;
 
         var fSpring = {
-          x: stiffness * delta.x,
-          y: stiffness * delta.y
+          x: stiffness * delta.x * distanceRatio,
+          y: stiffness * delta.y * distanceRatio
         };
 
         var fDamping = {

@@ -30,15 +30,17 @@ function updateSprings(springs) {
       y: p2.y - p1.y
     }
 
-    const distance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2)) - length
+    const rawDistance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2))
+    const distance = rawDistance - length
 
     if (Math.abs(distance) > 0.01) {
       const bodyAVelocity = (bodyA != null) ? bodyA.velocity : ZeroVector
       const bodyBVelocity = (bodyB != null) ? bodyB.velocity : ZeroVector
+      const distanceRatio = distance/rawDistance
 
       const fSpring = {
-        x: stiffness * delta.x,
-        y: stiffness * delta.y
+        x: stiffness * delta.x * distanceRatio,
+        y: stiffness * delta.y * distanceRatio
       }
 
       const fDamping = {
