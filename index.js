@@ -25,44 +25,18 @@ function updateSprings(springs) {
 
     const p1 = (bodyA != null) ? offset(bodyA.position, rotateVector(pointA, bodyA.angle)) : pointA
     const p2 = (bodyB != null) ? offset(bodyB.position, rotateVector(pointB, bodyB.angle)) : pointB
-    const delta = {
-      x: p2.x - p1.x, 
-      y: p2.y - p1.y
+
+    const v1 = (bodyA != null) ? bodyA.velocity : ZeroVector
+    const v2 = (bodyB != null) ? bodyB.velocity : ZeroVector
+
+    const { f1, f2 } = MatterSprings.calculateSpringForces(p1, p2, v1, v2, stiffness, damping, length)
+
+    if (bodyA != null) {
+      Matter.Body.applyForce(bodyA, p1, f1)
     }
 
-    const rawDistance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2))
-    const distance = rawDistance - length
-
-    if (Math.abs(distance) > 0.01) {
-      const bodyAVelocity = (bodyA != null) ? bodyA.velocity : ZeroVector
-      const bodyBVelocity = (bodyB != null) ? bodyB.velocity : ZeroVector
-      const distanceRatio = distance/rawDistance
-
-      const fSpring = {
-        x: stiffness * delta.x * distanceRatio,
-        y: stiffness * delta.y * distanceRatio
-      }
-
-      const fDamping = {
-        // TODO This code is actually wrong right now, since it doesn't take into account that the 
-        // bodies maybe already be travelling at some velocity which is irrelevant to the spring
-        x: damping * 100 * (bodyAVelocity.x + bodyBVelocity.x),
-        y: damping * 100 * (bodyAVelocity.y + bodyBVelocity.y)
-      }
-
-      if (bodyA != null) {
-        Matter.Body.applyForce(bodyA, p1, {
-          x: (fSpring.x - fDamping.x) * 1e-6,
-          y: (fSpring.y - fDamping.y) * 1e-6
-        })
-      }
-
-      if (bodyB != null) {
-        Matter.Body.applyForce(bodyB, p2, {
-          x: -(fSpring.x + fDamping.x) * 1e-6,
-          y: -(fSpring.y + fDamping.y) * 1e-6
-        })
-      }
+    if (bodyB != null) {
+      Matter.Body.applyForce(bodyB, p2, f2)
     }
   }
 }
@@ -162,6 +136,52 @@ const MatterSprings = {
         damping: damping || 0.02,
         angle: angle || 0,
         type: 'torsionSpring'
+      }
+    }
+  },
+
+  calculateSpringForces: function(p1, p2, v1, v2, stiffness, damping, springLength) {
+    const delta = {
+      x: p2.x - p1.x, 
+      y: p2.y - p1.y
+    }
+  
+    const rawDistance = Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2))
+    const distance = rawDistance - springLength
+  
+    if (Math.abs(distance) > 0.01) {
+      const distanceRatio = distance/rawDistance
+  
+      const fSpring = {
+        x: stiffness * delta.x * distanceRatio,
+        y: stiffness * delta.y * distanceRatio
+      }
+  
+      const fDamping = {
+        // TODO This code is actually wrong right now, since it doesn't take into account that the 
+        // bodies maybe already be travelling at some velocity which is irrelevant to the spring
+        x: damping * 100 * (v1.x + v2.x),
+        y: damping * 100 * (v1.y + v2.y)
+      }
+  
+      const f1 = {
+        x: (fSpring.x - fDamping.x) * 1e-6,
+        y: (fSpring.y - fDamping.y) * 1e-6
+      }
+  
+      const f2 = {
+        x: -(fSpring.x + fDamping.x) * 1e-6,
+        y: -(fSpring.y + fDamping.y) * 1e-6
+      }
+      
+      return { 
+        f1: f1, 
+        f2: f2 
+      }
+    } else {
+      return { 
+        f1: ZeroVector, 
+        f2: ZeroVector 
       }
     }
   }
